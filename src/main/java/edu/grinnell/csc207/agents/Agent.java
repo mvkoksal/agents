@@ -24,7 +24,7 @@ public class Agent{
         } else if (randomNum == 5 || randomNum == 6) {
             //left
             randomDir = 2;
-        } else {canmove = canMove(environment, dir);
+        } else {
             //right
             randomDir = 3;
         }
