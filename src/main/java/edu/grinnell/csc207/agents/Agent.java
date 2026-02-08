@@ -5,10 +5,14 @@ import java.util.ArrayList;
 public class Agent{
     int currentPos;
     int points;
+    boolean justAte;
+    int numMoves;
     
-    public Agent() {
-        currentPos = 13;
+    public Agent(int startPos) {
+        currentPos = startPos;
         points = 0;
+        justAte = false;
+        numMoves = 0;
     }
 
     public int pickDirection(){
@@ -24,7 +28,7 @@ public class Agent{
         } else if (randomNum == 5 || randomNum == 6) {
             //left
             randomDir = 2;
-        } else {
+        } else { 
             //right
             randomDir = 3;
         }
@@ -33,25 +37,25 @@ public class Agent{
 
     public int canMove(ArrayList<String> environment, int dir) {
         if (dir == 0) { // up
-            if (environment.get(currentPos - 26).equals("0") || currentPos - 26 < 0) {
+            if (currentPos - 26 < 0 || environment.get(currentPos - 26).equals("0") || environment.get(currentPos - 26).equals("I")) {
                 return -1;
             } else {
                 return currentPos - 26;
             }
         } else if (dir == 1) { // down
-            if (environment.get(currentPos + 26).equals("0") || currentPos + 26 > 648) {
+            if (currentPos + 26 > 648 || environment.get(currentPos + 26).equals("0") || environment.get(currentPos + 26).equals("I")) {
                 return -1;
             } else {
                 return currentPos + 26;
             }
         } else if (dir == 2) { // left
-            if (environment.get(currentPos - 1).equals("0") || environment.get(currentPos - 1).equals("\n")) {
+            if (environment.get(currentPos - 1).equals("\n") || environment.get(currentPos - 1).equals("0") || environment.get(currentPos - 1).equals("I")) {
                 return -1;
             } else {
                 return currentPos - 1;
             }
         } else { // right
-            if (environment.get(currentPos + 1).equals("0") || environment.get(currentPos + 1).equals("\n")) {
+            if ( environment.get(currentPos + 1).equals("\n") || environment.get(currentPos + 1).equals("0") || environment.get(currentPos + 1).equals("I")) {
                 return -1;
             } else {
                 return currentPos + 1;
@@ -59,14 +63,38 @@ public class Agent{
         }
     }
 
+    public boolean canMoveAtAll(ArrayList<String> environment) {
+        if (canMove(environment, 0) > -1 || canMove(environment, 1) > -1 || canMove(environment, 2) > -1 || canMove(environment, 3) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void move(ArrayList<String> environment) {
+        if (justAte) {
+            environment.set(currentPos,"$");
+            justAte = false;
+        }
+
         int dir = pickDirection();
         int canmove = canMove(environment, dir);
-        while (canmove != -1) {
+        
+        
+        while (canmove == -1) {
             dir = pickDirection();
             canmove = canMove(environment, dir);
-            currentPos = canmove;
-        } 
+        }
+        int prevPos = currentPos;
+        currentPos = canmove;
+        
+        if (environment.get(currentPos).equals("$")) {
+            points++;
+            justAte = true;
+        }
+
+        environment.set(currentPos, "I");
+        environment.set(prevPos, " ");
     }
 }
     
