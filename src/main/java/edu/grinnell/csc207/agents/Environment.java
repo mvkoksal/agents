@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Scanner;
 
 public class Environment {
@@ -40,6 +39,7 @@ public class Environment {
 
     public static void main(String[] args) throws IOException {
         int moveCounter = 0;
+        int test = 2;
         Environment env = new Environment();
 
         ArrayList<Agent> agents = new ArrayList<>();
@@ -66,7 +66,7 @@ public class Environment {
 
             for(int i=0; i<agents.size(); i++){
                 if (agents.get(i).canMoveAtAll(env.environment)){
-                    agents.get(i).move(env.environment);
+                    agents.get(i).move(env.environment, test, i);
                     if (agents.get(i).points < 1) {
                         agents.get(i).numMoves++;
                     }

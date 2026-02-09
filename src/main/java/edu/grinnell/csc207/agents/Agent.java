@@ -35,6 +35,32 @@ public class Agent{
         return randomDir;
     }
 
+    public int pickDirection2(){
+        Random random = new Random();
+        int randomNum = random.nextInt(0,10);
+        int randomDir = -1;
+        if(randomNum == 0 || randomNum == 1 || randomNum == 2) {
+            //up
+            randomDir = 0;
+        } else if(randomNum == 3 || randomNum == 4) {
+            //down
+            randomDir = 1;
+        } else if (randomNum == 5 || randomNum == 6) {
+            //left
+            randomDir = 2;
+        } else { 
+            //right
+            randomDir = 3;
+        }
+        return randomDir;
+    }
+
+    public int pickDirection3(){
+        Random random = new Random();
+        int randomNum = random.nextInt(0,4);
+        return randomNum;
+    }
+
     public int canMove(ArrayList<String> environment, int dir) {
         if (dir == 0) { // up
             if (currentPos - 26 < 0 || environment.get(currentPos - 26).equals("0") || environment.get(currentPos - 26).equals("I")) {
@@ -71,15 +97,23 @@ public class Agent{
         }
     }
 
-    public void move(ArrayList<String> environment) {
+    public void move(ArrayList<String> environment, int test, int agent) {
         if (justAte) {
             environment.set(currentPos,"$");
             justAte = false;
         }
 
-        int dir = pickDirection();
-        int canmove = canMove(environment, dir);
-        
+        int dir;
+        if (test == 1){
+            dir = pickDirection(); 
+        } else {
+            if (agent == 0) {
+                dir = pickDirection2();
+            } else {
+                dir = pickDirection3();
+            }
+        }
+        int canmove = canMove(environment, dir);  
         
         while (canmove == -1) {
             dir = pickDirection();
